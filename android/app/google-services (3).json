@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "325631276760",
+    "project_id": "crimee-f7f63",
+    "storage_bucket": "crimee-f7f63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325631276760:android:68a74f3e3aff466efa49ad",
+        "android_client_info": {
+          "package_name": "com.example.crimebott"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpB_K_NvyDIDPS1X_sejhZPwLL4z1kpS4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

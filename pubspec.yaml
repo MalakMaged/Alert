@@ -1,0 +1,69 @@
+name: crimebott
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.19.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  latlong2: ^0.8.2
+  flutter_map: ^2.2.0
+  firebase_auth: ^4.3.0
+  cloud_firestore: ^4.4.5
+  firebase_core: ^2.8.0
+  http: ^0.13.5
+  firebase_database: ^10.3.8
+  firebase_storage: ^11.5.6
+  provider: ^6.1.1
+  upgrade: ^0.0.8
+  flutter_launcher_icons: ^0.11.0
+  flutter_riverpod: ^2.4.9
+  location: ^5.0.0
+  google_maps_flutter: ^2.5.0
+  google_maps_flutter_web: ^0.5.2
+  image_picker: ^1.0.5
+
+  
+
+ 
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.2
+  bdd_widget_test: ^1.2.1
+  build_runner: ^2.3.3
+  flutter_driver:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/icons/map-point.png
+    - assets/background_img.jpg
+    - assets/road.jpg
+   
+ # fonts:
+   # - family: MaterialIcons
+    #  fonts:
+     #   - asset: fonts/MaterialIcons-Regular.ttf
+     #   - asset: fonts/MaterialIconsOutlined-Regular.codepoints
+      #  - asset: fonts/MaterialIconsOutlined-Regular.otf
+      #  - asset: fonts/MaterialIconsRound-Regular.codepoints
+      #  - asset: fonts/MaterialIconsRound-Regular.otf
+      #  - asset: fonts/MaterialIconsSharp-Regular.codepoints
+      #  - asset: fonts/MaterialIconsSharp-Regular.otf
+      #  - asset: fonts/MaterialIconsTwoTone-Regular.codepoints
+      #  - asset: fonts/MaterialIconsTwoTone-Regular.otf
+
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
