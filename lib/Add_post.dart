@@ -21,6 +21,8 @@ class AddPostPage extends StatefulWidget {
   _AddPostPageState createState() => _AddPostPageState();
 }
 
+
+
 class _AddPostPageState extends State<AddPostPage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   PostType _selectedType = PostType.robberyAssault;
@@ -34,11 +36,14 @@ class _AddPostPageState extends State<AddPostPage> {
     _userDataFuture = _loadUsername();
   }
 
+
+  
   Future<DocumentSnapshot<Map<String, dynamic>>> _loadUsername() async {
     User? user = FirebaseAuth.instance.currentUser;
     return FirebaseFirestore.instance.collection('users').doc(user?.uid).get();
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,10 +141,12 @@ class _AddPostPageState extends State<AddPostPage> {
                     _contentController.text.isNotEmpty) {
                   User? user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
+                    
                     // Use the username passed to the widget
                     String username = widget.username;
 
                     // Use the current time as the timestamp
+                    
                     DateTime timestamp = DateTime.now();
 
                     // Create the Post object with the updated fields
@@ -177,6 +184,11 @@ class _AddPostPageState extends State<AddPostPage> {
 // import 'package:flutter/material.dart';
 // import 'post.dart';
 // import 'constants.dart';
+
+
+
+
+
 
 // enum PostType { accident, robberyAssault, fireAccident }
 
