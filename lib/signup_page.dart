@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'signup_form.dart';
+
+
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -67,8 +68,11 @@ class SignUpPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () 
                 {
+                  
                   // Add logic to handle gallery photo upload
+                  
                 },
+                
                 child: Text('Upload Photo from Gallery'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.red,
