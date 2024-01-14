@@ -24,6 +24,9 @@ class CrimeAppHomePage extends StatelessWidget {
   }
 }
 
+
+
+
 // Home Page Widget
 class CrimeHomePage extends StatefulWidget {
   const CrimeHomePage({Key? key}) : super(key: key);
@@ -85,3 +88,16 @@ class _CrimeAppHomePageState extends State<CrimeHomePage> {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
