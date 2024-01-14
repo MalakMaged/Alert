@@ -6,6 +6,14 @@ import 'post.dart';
 import 'constants.dart';
 import 'dashboard.dart';
 
+
+
+
+
+
+
+
+
 class AddPostPage extends StatefulWidget {
   final String username;
   const AddPostPage({Key? key, required this.username}) : super(key: key);
