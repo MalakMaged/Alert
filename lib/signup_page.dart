@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'signup_form.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -11,6 +12,7 @@ class SignUpPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
+                                       
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -18,13 +20,17 @@ class SignUpPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
+                
                 'Create an account',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+                  
                 ),
+                
               ),
+              
               SizedBox(height: 20),
               Container(
                 width: 150,
@@ -35,9 +41,12 @@ class SignUpPage extends StatelessWidget {
                     color: Colors.red, // Set the red stroke color
                     width: 3.0,
                   ),
+                  
                 ),
+                
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () 
+                  {
                     // Add logic to handle photo upload
                   },
                   child: Icon(
@@ -45,15 +54,19 @@ class SignUpPage extends StatelessWidget {
                     size: 40,
                     color: Colors.grey[700],
                   ),
+                  
                   style: ElevatedButton.styleFrom(
                     primary: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
+                  
                 ),
+                
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () 
+                {
                   // Add logic to handle gallery photo upload
                 },
                 child: Text('Upload Photo from Gallery'),
@@ -66,11 +79,19 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
+              
               SignUpForm(),
+              
             ],
+            
           ),
+          
         ),
+        
       ),
+      
     );
+    
   }
+  
 }
