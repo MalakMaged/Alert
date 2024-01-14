@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:crimebott/login_page.dart';
 import 'package:crimebott/models/user.dart';
 
+
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
 
 class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _usernameController = TextEditingController();
@@ -108,15 +111,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     border: Border.all(
                       color: Colors.blueGrey,
                       width: 2.0,
+                      
                     ),
+                    
                     color: Colors
                         .grey[400], // Set the background color of the container
+                    
                   ),
+                  
                   child: Theme(
                     data: Theme.of(context).copyWith(
                       canvasColor: Colors
                           .grey[400], // Set the color behind the dropdown items
+                      
                     ),
+                    
                     child: DropdownButton<String>(
                       value: _selectedField,
                       items: _fields.map((field) {
@@ -126,6 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             field,
                             style: TextStyle(
                                 color: Colors.black), // Set text color
+                            
                           ),
                         );
                       }).toList(),
@@ -134,7 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           _selectedField = value!;
                         });
                       },
+                      
                       underline: Container(), // Remove the default underline
+                      
                     ),
                   ),
                 ),
@@ -148,45 +160,62 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide(
                           color: Colors.blueGrey), // Set border color
+                      
                     ),
+                    
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide:
                           BorderSide(color: Colors.black), // Set border color
+                      
                     ),
+                    
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: BorderSide(
                           color: Colors.red), // Set focused border color
+                      
                     ),
+                    
                     fillColor: Colors.grey[400],
                     filled: true,
+                    
                   ),
                 ),
+                
                 SizedBox(height: 200.0),
                 ElevatedButton(
                   onPressed: () {
                     _updateProfile();
+                    
                   },
+                  
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
+                      
                     ),
                   ),
+                  
                   child: Text('Update $_selectedField'),
+                  
                 ),
+                
                 // sign out button
+                
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     signOut(context);
                   },
+                  
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
+                      
                     ),
                   ),
                   child: Text('LogOut'),
@@ -200,6 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   TextEditingController _getControllerForSelectedField() {
+    
     switch (_selectedField) {
       case 'Username':
         return _usernameController;
@@ -209,10 +239,12 @@ class _ProfilePageState extends State<ProfilePage> {
         return _passwordController;
       default:
         return TextEditingController();
+        
     }
   }
 
   Future<void> _updateProfile() async {
+    
     try {
       User? user = _auth.currentUser;
 
@@ -227,21 +259,31 @@ class _ProfilePageState extends State<ProfilePage> {
           await user.reauthenticateWithCredential(credential);
 
           if (_selectedField == 'Password') {
+            
             if (_passwordController.text.isNotEmpty) {
+              
               await user.updatePassword(_passwordController.text);
+              
             } else {
+              
               throw Exception(
                   "New password is required for updating the password");
             }
           } else if (_selectedField == 'Email') {
+            
             if (_emailController.text.isNotEmpty) {
+              
               await user.updateEmail(_emailController.text);
+              
             } else {
+              
               throw Exception("New email is required for updating the email");
+              
             }
           }
 
           FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+            
             'username': _usernameController.text,
             'email': _emailController.text,
             'password': _passwordController.text,
@@ -255,12 +297,16 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     } catch (error) {
+      
       print('Error updating profile: $error');
       String errorMessage = 'Error updating profile. Please try again.';
       if (error is FirebaseAuthException) {
+        
         errorMessage = error.message ?? errorMessage;
+        
       }
       ScaffoldMessenger.of(context).showSnackBar(
+        
         SnackBar(
           content: Text(errorMessage),
         ),
@@ -269,6 +315,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<String?> _showPasswordPrompt() async {
+    
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) {
