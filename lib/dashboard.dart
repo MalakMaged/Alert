@@ -5,10 +5,14 @@ import 'Add_post.dart';
 import 'post.dart';
 import 'constants.dart';
 
+
+
 class DashboardPage extends StatefulWidget {
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
+
+
 
 class _DashboardPageState extends State<DashboardPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -20,6 +24,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   List<Post> posts = [];
 
+
+  
   PostType getCrimeTypeFromString(String value) {
     switch (value) {
       case 'CarAccident':
@@ -33,6 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  
   @override
   void initState() {
     super.initState();
@@ -40,6 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
     _fetchPosts();
   }
 
+  
   Future<void> _deletePost(Post post) async {
     try {
       QuerySnapshot<Object?> postSnapshot =
@@ -88,6 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
         false; // If user dismisses the dialog, consider it as canceling the deletion
   }
 
+  
   Future<void> _loadUsername() async {
     User? user = _auth.currentUser;
     if (user != null) {
