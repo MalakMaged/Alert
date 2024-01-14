@@ -8,12 +8,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 
+
+
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
 
   @override
   _MapPageState createState() => _MapPageState();
 }
+
 
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
@@ -23,6 +26,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
+    
     super.initState();
     getLocation();
     loadMarkersFromFirestore();
@@ -41,6 +45,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> _addCrimeMarker(
+    
       LatLng position,
       String description,
       Uint8List imageBytes,
@@ -99,6 +104,7 @@ class _MapPageState extends State<MapPage> {
         await FirebaseFirestore.instance.collection('crimeMarkers').get();
 
     for (var doc in markers.docs) {
+      
       final latitude = doc['latitude'] as double;
       final longitude = doc['longitude'] as double;
       final description = doc['description'] as String;
@@ -131,6 +137,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   double _getMarkerColor(String crimeType) {
+    
     switch (crimeType) {
       case 'CarAccident':
         return BitmapDescriptor.hueBlue;
@@ -213,6 +220,7 @@ class _MapPageState extends State<MapPage> {
 }
 
 class CrimeDetailsPage extends StatefulWidget {
+  
   final LatLng position;
 
   CrimeDetailsPage(this.position);
@@ -222,6 +230,7 @@ class CrimeDetailsPage extends StatefulWidget {
 }
 
 class _CrimeDetailsPageState extends State<CrimeDetailsPage> {
+  
   String description = '';
   Uint8List imageBytes = Uint8List(0);
   String reporterName = '';
@@ -319,6 +328,7 @@ class _CrimeDetailsPageState extends State<CrimeDetailsPage> {
                   },
                 );
               },
+              
               child: Text('Submit'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
