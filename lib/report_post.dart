@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+//unused 
+
 
 class ReportPost extends StatefulWidget {
   @override
@@ -7,7 +9,7 @@ class ReportPost extends StatefulWidget {
 
 class _ReportPostState extends State<ReportPost> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+//initializing reporting post
   @override
   void initState() {
     super.initState();
@@ -18,3 +20,8 @@ class _ReportPostState extends State<ReportPost> {
     return Text("Report");
   }
 }
+
+
+
+
+
