@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 // Public enum
+
+
 enum PostType { accident, robberyAssault, fireAccident }
 
 Map<PostType, IconData> crimeTypeIcons = {
@@ -9,13 +11,17 @@ Map<PostType, IconData> crimeTypeIcons = {
   PostType.fireAccident: Icons.pin_drop,
 };
 
+
 Map<PostType, Color> crimeTypeColors = {
   PostType.accident: Colors.blue,
   PostType.robberyAssault: Colors.purple,
   PostType.fireAccident: Colors.orange,
 };
 
-Color getColorForType(PostType crimeType) {
+
+Color getColorForType(PostType crimeType) 
+{
+ 
   switch (crimeType) {
     case PostType.accident:
       return Colors.blue; // Or any color you prefer for accident type
@@ -40,6 +46,7 @@ IconData getIconForType(PostType type) {
       return Icons.error; // Default icon if not found
   }
 }
+
 
 String getCrimeType(PostType type) {
   switch (type) {
