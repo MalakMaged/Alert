@@ -1,7 +1,10 @@
 // login_page.dart
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+
 import 'signup_page.dart';
+
 import 'login_form.dart';
 
 class LoginPage extends StatelessWidget {
@@ -16,6 +19,8 @@ class LoginPage extends StatelessWidget {
   //       email: emailController.text, password: passwordController.text);
   // }
 
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +28,9 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('ALERT'), centerTitle: true,
         backgroundColor: Colors.red, // Set the login page app bar color
+        
       ),
+      
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -37,7 +44,9 @@ class LoginPage extends StatelessWidget {
                   'lib/icons/map-point.png',
                   color: Colors.grey[900],
                 ),
+                
               ),
+              
               Text(
                 "LOGIN\n",
                 style: TextStyle(
@@ -45,16 +54,22 @@ class LoginPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: Color(0xffe6584e),
                 ),
+                
               ),
+              
               Text(
                 "Welcome back",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+                  
                 ),
+                
               ),
+              
               LoginForm(),
+              
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +85,9 @@ class LoginPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(builder: (context) => SignUpPage()),
                       );
+                      
                     },
+                    
                     child: Text(
                       'Sign up here',
                       style: TextStyle(
@@ -88,4 +105,5 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-  
+
+
