@@ -4,12 +4,14 @@ import 'models/user.dart';
 import 'signup_page.dart';
 import 'crimehomepage.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'
+  ;
 
 class SignUpForm extends StatefulWidget {
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
+
 
 class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -101,6 +103,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
+                
                 try {
                   UserCredential userCredential = await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
