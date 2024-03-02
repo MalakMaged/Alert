@@ -1,5 +1,19 @@
+from google.colab import drive
+drive.mount('/content/drive')
+!pip install -U -q PyYAML
+!pip install -U -q seaborn
+!pip install -U -q pandas
+!pip install -U -q matplotlib
+!pip install -U -q numpy
+!pip install -U -q torch torchvision
+!git clone https://github.com/ultralytics/yolov5.git
+%cd yolov5
 !python train.py --img-size 640 --batch-size 16 --epochs 50 --data custom.yaml --weights yolov5s.pt
 !python val.py --img-size 640 --conf 0.4 --data custom.yaml --weights runs/train/exp2/weights/best.pt
 !python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.25 --source /content/drive/MyDrive/1000_F_203851486_xn2MbtkE3E3W8aH2w8WR1Y05WclNUMoH.jpg
 from IPython.display import Image
 display(Image(filename='/content/yolov5/runs/detect/exp/1000_F_203851486_xn2MbtkE3E3W8aH2w8WR1Y05WclNUMoH.jpg'))
+!python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.25 --source /content/drive/MyDrive/depositphotos_111969218-stock-photo-black-man-holding-a-pistol.jpg
+display(Image(filename='/content/yolov5/runs/detect/exp2/depositphotos_111969218-stock-photo-black-man-holding-a-pistol.jpg'))
+!python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.25 --source /content/drive/MyDrive/DefenseKnifeAttack1115.jpg
+display(Image(filename='/content/yolov5/runs/detect/exp3/DefenseKnifeAttack1115.jpg'))
