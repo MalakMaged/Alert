@@ -17,3 +17,7 @@ display(Image(filename='/content/yolov5/runs/detect/exp/1000_F_203851486_xn2Mbtk
 display(Image(filename='/content/yolov5/runs/detect/exp2/depositphotos_111969218-stock-photo-black-man-holding-a-pistol.jpg'))
 !python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.25 --source /content/drive/MyDrive/DefenseKnifeAttack1115.jpg
 display(Image(filename='/content/yolov5/runs/detect/exp3/DefenseKnifeAttack1115.jpg'))
+!python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.25 --source /content/drive/MyDrive/24836185-close-up-on-a-man-s-hands-holding-a-gun-and-a-knife-while-being-prepared-for-a-crime-or-an-attack.jpg
+display(Image(filename='/content/yolov5/runs/detect/exp4/24836185-close-up-on-a-man-s-hands-holding-a-gun-and-a-knife-while-being-prepared-for-a-crime-or-an-attack.jpg'))
+!python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.25 --source /content/drive/MyDrive/220530142547-seniors-walking-stock.jpg
+display(Image(filename='/content/yolov5/runs/detect/exp7/220530142547-seniors-walking-stock.jpg'))
