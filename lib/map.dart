@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +9,12 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'secrets.dart';
+import 'package:flutter_vision/flutter_vision.dart';
+import 'package:image/image.dart' as img;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
+
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -27,6 +31,7 @@ class _MapPageState extends State<MapPage> {
   Set<LatLng> _avoidCoordinates = {LatLng(30.027439045271805, 31.528331641070277)}; // Set to store avoid coordinates
   late GoogleMapController mapController;
   Set<Marker> crimeMarkers = {};
+  
   bool placingPin = false;
 
   late Future<BitmapDescriptor> _startMarkerIcon;
@@ -50,6 +55,7 @@ class _MapPageState extends State<MapPage> {
         crimeDetails['isAnonymous'],
         crimeDetails['crimeType'],
         crimeDetails['reportTime'],
+        crimeDetails['weaponDetected'],
       );
     }
   });
@@ -66,6 +72,11 @@ class _MapPageState extends State<MapPage> {
  
     loadMarkersFromFirestore();
   }
+    Future<BitmapDescriptor> _loadMarkerIcon(String assetName) async {
+    final ByteData byteData = await rootBundle.load(assetName);
+    final Uint8List imageData = byteData.buffer.asUint8List();
+    return BitmapDescriptor.fromBytes(imageData);
+  }
 
 Future<void> _addCrimeMarker(
   LatLng position,
@@ -75,22 +86,27 @@ Future<void> _addCrimeMarker(
   bool isAnonymous,
   String crimeType,
   DateTime reportTime,
+  bool weaponDetected,  // Add this parameter
+
 ) async {
   final markerId = MarkerId('${position.latitude}-${position.longitude}');
   BitmapDescriptor markerIcon;
 
   switch (crimeType) {
-    case 'CarAccident':
-      markerIcon = await _carAccidentMarkerIcon;
+    case 'Car Accident':
+      markerIcon = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), 'assets/car_accident.png');
       break;
-    case 'fireAccident':
-      markerIcon = await _fireAccidentMarkerIcon;
+    case 'Fire':
+      markerIcon = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), 'assets/fire.png');
       break;
-    case 'robberyAssault':
-      markerIcon = await _robberyAssaultMarkerIcon;
+    case 'Robbery/Assault':
+      markerIcon = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), 'assets/robbery_assault.png');
       break;
     default:
-      markerIcon = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+      markerIcon = BitmapDescriptor.defaultMarker;
   }
 
   final marker = Marker(
@@ -112,11 +128,13 @@ Future<void> _addCrimeMarker(
     'latitude': position.latitude,
     'longitude': position.longitude,
     'description': description,
-    'imageUrl': '',
+    'imageUrl': base64Encode(imageBytes),
     'reporterName': reporterName,
     'isAnonymous': isAnonymous,
     'reportTime': Timestamp.fromDate(reportTime),
     'crimeType': crimeType,
+    'weaponDetected': weaponDetected,  // Save the detection result
+
   });
 
   String imageUrl = await _uploadImageToFirestore(imageBytes, docRef.id);
@@ -155,7 +173,7 @@ Future<void> _addCrimeMarker(
       final marker = Marker(
         markerId: markerId,
         position: LatLng(latitude, longitude),
-        // icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        // icon: await Marker,
         infoWindow: InfoWindow(
           title: 'Crime',
           snippet: '''
@@ -171,25 +189,6 @@ Future<void> _addCrimeMarker(
         crimeMarkers.add(marker);
       });
     }
-  }
-
-  double _getMarkerColor(String crimeType) {
-    switch (crimeType) {
-      case 'CarAccident':
-        return BitmapDescriptor.hueBlue;
-      case 'fireAccident':
-return BitmapDescriptor.hueOrange;
-      case 'robberyAssault':
-        return BitmapDescriptor.hueRed;
-      default:
-        return BitmapDescriptor.hueRed;
-    }
-  }
-
-  Future<BitmapDescriptor> _loadMarkerIcon(String assetName) async {
-    final ByteData byteData = await rootBundle.load(assetName);
-    final Uint8List imageData = byteData.buffer.asUint8List();
-    return BitmapDescriptor.fromBytes(imageData);
   }
 
   void _onMapTap(LatLng tappedPoint) async {
@@ -371,6 +370,7 @@ return BitmapDescriptor.hueOrange;
   }
 
   double _calculateDistance(LatLng point1, LatLng point2) {
+    // harvesine formula
     final lat1 = point1.latitude;
     final lon1 = point1.longitude;
     final lat2 = point2.latitude;
@@ -444,6 +444,7 @@ class _CrimeDetailsPageState extends State<CrimeDetailsPage> {
   bool isAnonymous = false;
   String crimeType = 'Car Accident';
   DateTime reportTime = DateTime.now();
+  bool weaponDetected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -508,6 +509,17 @@ class _CrimeDetailsPageState extends State<CrimeDetailsPage> {
                   setState(() {
                     imageBytes = bytes;
                   });
+
+                  final detectionResult = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => YoloImage(imageBytes: imageBytes),
+                    ),
+                  );
+
+                  setState(() {
+                    weaponDetected = detectionResult['weaponDetected'];
+                  });
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -523,13 +535,14 @@ class _CrimeDetailsPageState extends State<CrimeDetailsPage> {
               onPressed: () {
                 Navigator.pop(
                   context,
-{
+                  {
                     'description': description,
                     'imageBytes': imageBytes,
                     'reporterName': reporterName,
                     'isAnonymous': isAnonymous,
                     'crimeType': crimeType,
                     'reportTime': reportTime,
+                    'weaponDetected': weaponDetected,
                   },
                 );
               },
@@ -545,5 +558,155 @@ class _CrimeDetailsPageState extends State<CrimeDetailsPage> {
         ),
       ),
     );
+  }
+}
+
+class YoloImage extends StatefulWidget {
+  final Uint8List imageBytes;
+
+  const YoloImage({required this.imageBytes, Key? key}) : super(key: key);
+
+  @override
+  State<YoloImage> createState() => _YoloImageState();
+}
+
+class _YoloImageState extends State<YoloImage> {
+  late FlutterVision vision;
+  List<Map<String, dynamic>> yoloResults = [];
+  bool isLoaded = false;
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+  int? imageWidth;
+  int? imageHeight;
+
+  @override
+  void initState() {
+    super.initState();
+    vision = FlutterVision();
+    loadYoloModel();
+    loadImage(widget.imageBytes);
+  }
+
+  @override
+  void dispose() {
+    vision.closeYoloModel();
+    super.dispose();
+  }
+
+  Future<void> loadYoloModel() async {
+    await vision.loadYoloModel(
+      labels: 'assets/labels.txt',
+      modelPath: 'assets/best-fp16.tflite',
+      modelVersion: "yolov5",
+      numThreads: 8,
+      useGpu: false,
+    );
+    setState(() {
+      isLoaded = true;
+    });
+  }
+
+  Future<void> loadImage(Uint8List imageBytes) async {
+    try {
+      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+      final image = File(pickedFile!.path);
+      final decodedImage = img.decodeImage(imageBytes);
+      if (decodedImage != null) {
+        setState(() {
+          _image = image;
+          imageWidth = decodedImage.width;
+          imageHeight = decodedImage.height;
+        });
+        yoloOnImage(image, imageWidth!, imageHeight!);
+      } else {
+        throw Exception("Decoded image is null");
+      }
+    } catch (e) {
+      print("Error decoding or saving image: $e");
+    }
+  }
+
+  Future<void> yoloOnImage(File image, int width, int height) async {
+    try {
+      if (!await image.exists()) {
+        throw Exception("Image file does not exist");
+      }
+      final bytes = await image.readAsBytes();
+      final result = await vision.yoloOnImage(
+        bytesList: bytes,
+        imageHeight: height,
+        imageWidth: width,
+        iouThreshold: 0.4,
+        confThreshold: 0.4,
+        classThreshold: 0.5,
+      );
+      setState(() {
+        yoloResults = result;
+      });
+
+      final weaponDetected = yoloResults.any((result) => result['tag'] == 'knife');
+      Navigator.pop(context, {'weaponDetected': weaponDetected});
+    } catch (e) {
+      print("Error during YOLO detection: $e");
+      Navigator.pop(context, {'weaponDetected': false});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("YOLO Image Detection"),
+      ),
+      body: Column(
+        children: [
+          if (_image != null)
+            Stack(
+              children: [
+                Image.file(_image!, fit: BoxFit.contain),
+                ...displayBoxesAroundRecognizedObjects(size),
+              ],
+            ),
+          if (_image == null)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
+    if (yoloResults.isEmpty || _image == null) return [];
+double factorX = screen.width / (imageWidth ?? 1);
+double factorY = screen.height / (imageHeight ?? 1);
+
+    Color colorPick = const Color.fromARGB(255, 50, 233, 30);
+
+    return yoloResults.map((result) {
+      return Positioned(
+        left: result["box"][0] * factorX,
+        top: result["box"][1] * factorY,
+        width: (result["box"][2] - result["box"][0]) * factorX,
+        height: (result["box"][3] - result["box"][1]) * factorY,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: colorPick,
+              width: 3,
+            ),
+          ),
+          child: Text(
+            "${result['tag']} ${(result['confidence'])}%",
+            style: TextStyle(
+              background: Paint()..color = colorPick,
+              color: Colors.black,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      );
+    }).toList();
   }
 }
